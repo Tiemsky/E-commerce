@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+b<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Required meta tags -->
@@ -312,13 +312,17 @@
         </a>
         <div class="dropdown-menu dropdown-menu-header wd-200">
             <ul class="list-unstyled user-profile-nav">
-            <li><a href=""><i class="icon ion-ios-person-outline"></i> Modifier le profil</a></li>
-            <li><a href="{{ route('admin.password.change') }}"><i class="icon ion-ios-gear-outline"></i> Paramètres</a></li>
-            <li><a href="{{ route('admin.logout') }}"><i class="icon ion-power"></i> Se déconnecter</a></li>
-            </ul>
+                <li><a href=""><i class="icon ion-ios-person-outline"></i> Modifier le profil</a></li>
+                <li><a href="{{ route('admin.password.change') }}"><i class="icon ion-ios-gear-outline"></i> Paramètres</a></li>
+                <li><button type="button" onclick="document.getElementById('logOutForm').submit();"><i class="icon ion-power"></i> Se déconnecter</button></li>
+            </ul
         </div><!-- dropdown-menu -->
         </div><!-- dropdown -->
-    </nav>
+    </nav> 
+    <form id="logOutForm" class="d-none" action="{{ route('logout') }} " method="post">@csrf</form>
+
+
+
     <div class="navicon-right">
         <a id="btnRightMenu" href="" class="pos-relative">
         <i class="icon ion-ios-bell-outline"></i>

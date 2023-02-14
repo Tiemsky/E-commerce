@@ -67,7 +67,7 @@
                     </ul>
 
                     <div class="card-body">
-                        <a href="{{ route('user.logout') }}" class="btn btn-danger btn-sm btn-block">Se déconnecter</a>
+                        <a type="button" onclick="document.getElementById('logOutForm').submit();"><i class="icon ion-power" class="btn btn-danger btn-sm btn-block">Se déconnecter</a>
                     </div>
 
                 </div>
@@ -75,4 +75,5 @@
             </div>
         </div>
     </div>
+    <form id="logOutForm" class="d-none" action="{{ route('logout') }} " method="post">@csrf</form>
 @endsection

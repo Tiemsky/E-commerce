@@ -35,17 +35,6 @@ Route::middleware(['auth','admin'])->controller('App\Http\Controllers\AdminContr
     Route::get('admin/logout', 'logout')->name('admin.logout');
 });
 
-
-// Route::get('admin', 'App\Http\Controllers\Admin\LoginController@showLoginForm')->name('admin.login');
-// Route::post('admin', 'App\Http\Controllers\Admin\LoginController@login');
-        // Password Reset Routes...
-
-// Route::get('admin/password/reset', 'App\Http\Controllers\Admin\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
-// Route::post('admin-password/email', 'App\Http\Controllers\Admin\ForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
-// Route::get('admin/reset/password/{token}', 'App\Http\Controllers\Admin\ResetPasswordController@showResetForm')->name('admin.password.reset');
-// Route::post('admin/update/reset', 'App\Http\Controllers\Admin\ResetPasswordController@reset')->name('admin.reset.update');
-
-
     /// Admin Section 
 // categories 
 Route::middleware(['auth','admin'])
