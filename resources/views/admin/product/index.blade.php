@@ -33,42 +33,45 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($product as $row)
+                @foreach($products as $product)
                 <tr>
-                    <td>{{ $row->product_code }}</td>
-                    <td>{{ $row->product_name }}</td>
+                    <td>{{ $product->product_code }}</td>
+                    <td>{{ $product->product_name }}</td>
 
-                <td> <img src="{{ URL::to($row->image_one) }}" height="50px;" width="50px;"> </td>
-                    <td>{{ $row->category_name }}</td>
-                    <td>{{ $row->brand_name }}</td>
-                    <td>{{ $row->product_quantity }}</td>
+                <td> <img src="{{ URL::to($product->image_one) }}" height="50px;" width="50px;"> </td>
+                    <td>{{ $product->category_name }}</td>
+                    <td>{{ $product->brand_name }}</td>
+                    <td>{{ $product->product_quantity }}</td>
                     <td> 
-                    @if($row->status == 1)
+                    @if($product->status == 1)
                 <span class="badge badge-success">Active</span>
                     @else
                 <span class="badge badge-danger">Inactive</span>
                     @endif                  
 
                 </td>
-
-
-
+                <form action="{{route('product.destroy',[$product->id])}} " method="post">
+                    @csrf
+                    @method('DELETE')
                     <td>
-    <a href="{{ URL::to('edit/product/'.$row->id) }} " class="btn btn-sm btn-info" title="Modifier"><i class="fa fa-edit"></i></a>
-    <a href="{{ URL::to('delete/product/'.$row->id) }}" class="btn btn-sm btn-danger" title="Supprimer" id="delete"><i class="fa fa-trash"></i></a>
-
-    <a href="{{ URL::to('view/product/'.$row->id) }}" class="btn btn-sm btn-warning" title="Voir"><i class="fa fa-eye"></i></a>
-
-
-                @if($row->status == 1)
-    <a href="{{ URL::to('inactive/product/'.$row->id) }}" class="btn btn-sm btn-danger" title="Inactive" ><i class="fa fa-thumbs-down"></i></a>
-                @else
-    <a href="{{ URL::to('active/product/'.$row->id) }}" class="btn btn-sm btn-info" title="Active" ><i class="fa fa-thumbs-up"></i></a>
-                @endif
+                        <a href="{{route('product.edit',[$product->id,$product->product_slug])}} " class="btn btn-sm btn-info" title="Modifier">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="{{ URL::to('delete/product/'.$product->id) }}" class="btn btn-sm btn-danger" title="Supprimer" id="delete"><i class="fas fa-trash"></i></a>
                     
-
-
+                        <a href="{{ route('product.show',[$product->id, $product->product_slug]) }}" class="btn btn-sm btn-warning" title="Voir"><i class="fa fa-eye"></i></a>
+                    
+                    
+                        @if($product->status == 1)
+                            <a href="{{ URL::to('inactive/product/'.$product->id) }}" class="btn btn-sm btn-danger" title="Inactive" ><i class="fa fa-thumbs-down"></i></a>
+                        @else
+                            <a href="{{ URL::to('active/product/'.$product->id) }}" class="btn btn-sm btn-info" title="Active" ><i class="fa fa-thumbs-up"></i></a>
+                        @endif
+                                        
+                    
+                    
                     </td>
+                </form>
                     
                 </tr>
                 @endforeach
@@ -77,14 +80,6 @@
             </table>
             </div><!-- table-wrapper -->
         </div><!-- card -->
-
-        
-
-
     </div><!-- sl-mainpanel -->
-
-
-
-
 
     @endsection

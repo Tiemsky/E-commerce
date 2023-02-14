@@ -1,5 +1,6 @@
 <?php
 
+use App\Facades\Uploader;
 use Illuminate\Support\Facades\Route;
 
 
@@ -63,12 +64,6 @@ Route::middleware(['auth','admin'])
         ->get('admin/brand/{slug}/edit',[App\Http\Controllers\Admin\BrandController::class,'edit'])
         ->name('brand.edit');
         
-// Route::get('admin/brands', 'App\Http\Controllers\Admin\Category\BrandController@brand')->name('brands');
-// Route::post('admin/store/brand', 'App\Http\Controllers\Admin\Category\BrandController@storebrand')->name('store.brand');
-// Route::get('delete/brand/{id}', 'App\Http\Controllers\Admin\Category\BrandController@DeleteBrand');
-// Route::get('edit/brand/{id}', 'App\Http\Controllers\Admin\Category\BrandController@EditBrand');
-// Route::post('update/brand/{id}', 'App\Http\Controllers\Admin\Category\BrandController@UpdateBrand');
-
 
 // Sous Categories
 Route::get('admin/sub/category', 'App\Http\Controllers\Admin\Category\SubCategoryController@subcategories')->name('sub.categories');
@@ -76,6 +71,9 @@ Route::post('admin/store/subcat', 'App\Http\Controllers\Admin\Category\SubCatego
 Route::get('delete/subcategory/{id}', 'App\Http\Controllers\Admin\Category\SubCategoryController@DeleteSubcat');
 Route::get('edit/subcategory/{id}', 'App\Http\Controllers\Admin\Category\SubCategoryController@EditSubcat');
 Route::post('update/subcategory/{id}', 'App\Http\Controllers\Admin\Category\SubCategoryController@UpdateSubcat');
+
+
+
 
 // Coupons All 
 Route::get('admin/sub/coupon', 'App\Http\Controllers\Admin\Category\CouponController@Coupon')->name('admin.coupon');
@@ -92,11 +90,15 @@ Route::get('delete/sub/{id}', 'App\Http\Controllers\Admin\Category\CouponControl
 Route::get('get/subcategory/{category_id}', 'App\Http\Controllers\Admin\ProductController@GetSubcat');
 
 // Product All Route
-Route::middleware(['auth','admin'])->prefix('admin/product')->controller('App\Http\Controllers\Admin\ProductController')->group(function(){
-    Route::get('/', 'index')->name('product.index');
-    Route::get('create', 'create')->name('product.create');
-    Route::post('store', 'store')->name('product.store');
-});
+Route::middleware(['auth','admin'])
+        ->resource('admin/product', 'App\Http\Controllers\Admin\ProductController')
+        ->except(['edit','show']);
+Route::middleware(['auth','admin'])
+        ->get('admin/product/{id}/{slug}/edit', [App\Http\Controllers\Admin\ProductController::class, 'edit'])
+        ->name('product.edit');
+Route::middleware(['auth','admin'])
+->get('admin/product/{id}/{slug}/show', [App\Http\Controllers\Admin\ProductController::class, 'show'])
+->name('product.show');
 
 Route::get('inactive/product/{id}', 'App\Http\Controllers\Admin\ProductController@inactive');
 Route::get('active/product/{id}', 'App\Http\Controllers\Admin\ProductController@active');

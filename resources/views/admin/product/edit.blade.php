@@ -23,12 +23,13 @@
 
     <div class="card pd-20 pd-sm-40">
             <h6 class="card-body-title">Mise à jour du produit
-    <a href="{{ route('all.product')}}" class="btn btn-outline-dark btn-sm pull-right"> Tous les produits</a>
+    <a href="{{ route('product.index')}}" class="btn btn-outline-dark btn-sm pull-right"> Tous les produits</a>
             </h6>
             <p class="mg-b-20 mg-sm-b-30">Modifier le produit</p>
 
-        <form method="post" action="{{ url('update/product/withoutphoto/'.$product->id) }} " enctype="multipart/form-data">    
+        <form method="post" action="{{ route('product.update', $product->id) }} " enctype="multipart/form-data">    
         @csrf
+        @method('PATCH')
 
             <div class="form-layout">
             <div class="row mg-b-25">

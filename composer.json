@@ -6,17 +6,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/fortify": "^1.16",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
         "bumbummen99/shoppingcart": "^4.0",
         "fideloper/proxy": "^4.0",
-        "intervention/image": "^2.5",
+        "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^2.7",
+        "laravel/fortify": "^1.16",
+        "laravel/framework": "^9.19",
         "laravel/helpers": "^1.4",
         "laravel/passport": "^11.6.0",
+        "laravel/sanctum": "^3.0",
         "laravel/socialite": "^5.6.1",
+        "laravel/tinker": "^2.7",
         "stripe/stripe-php": "^10.5.0"
     },
     "require-dev": {

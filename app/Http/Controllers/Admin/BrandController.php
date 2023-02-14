@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Facades\Uploader;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
@@ -27,7 +28,7 @@ class BrandController extends Controller
             ['brand_name.required' => 'Veuillez entrer le nom de la marque'],
             ['brand_name.unique' => 'Cette marque est déjà prise']
             );
-            $image_url = $this->uploadFile($request, 'brand_logo');
+            $image_url =  Uploader::upload($request, 'brand_logo', self::BRAND_GlOBAL_PUBLIC_PATH);
             /*
             *Adding slug and logo to the collection
             */
@@ -60,7 +61,7 @@ class BrandController extends Controller
         $data = array();
         $data['brand_name'] = $request->brand_name;
         $data['brand_slug'] = Str::slug($request->brand_name);
-        $image_url = $this->uploadFile($request, 'brand_logo');
+        $image_url =  Uploader::upload($request, 'brand_logo', self::BRAND_GlOBAL_PUBLIC_PATH);
         if($image_url){
             unlink($oldlogo);
             $data['brand_logo'] = $image_url;
@@ -72,6 +73,7 @@ class BrandController extends Controller
         Brand::where('brand_slug',$slug)->update($data);
         return Redirect()->route('brand.index')->with($notification);
     }
+    
 
     public function destroy($id)
     {
@@ -87,18 +89,5 @@ class BrandController extends Controller
                     'alert-type'=>'success'
                     );
                 return Redirect()->back()->with($notification);
-    }
-
-
-    protected function uploadFile($request,$file_name){
-        $image = $request->file($file_name);
-        if ($image) {
-        $image_name = date('dmy_H_s_i');
-        $ext = strtolower($image->getClientOriginalExtension());
-        $image_full_name = $image_name.'.'.$ext;
-        $image_url = self::BRAND_GlOBAL_PUBLIC_PATH.$image_full_name;
-        $image->move(self::BRAND_GlOBAL_PUBLIC_PATH,$image_full_name);
-        return $image_url;
-    }
     }
 }

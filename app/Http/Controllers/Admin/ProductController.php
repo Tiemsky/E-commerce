@@ -2,23 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Image;
+use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
 
+    const TOTAL_NUMBER_OF_UPLOADED_IMAGE = 3;
+
+
     public function index(){
-        $product = DB::table('products')
+        $products = DB::table('products')
                     ->join('categories','products.category_id','categories.id')
                     ->join('brands','products.brand_id','brands.id')
                     ->select('products.*','categories.category_name','brands.brand_name')
                     ->get();
                     // return response()->json($product);
-                    return view('admin.product.index',compact('product'));
+                    return view('admin.product.index',compact('products'));
     }
+
 
     public function create(){
         $category = DB::table('categories')->get();
@@ -36,6 +41,7 @@ class ProductController extends Controller
     
         $data = array();
         $data['product_name'] = $request->product_name;
+        $data['product_slug'] = Str::slug($request->product_name);
         $data['product_code'] = $request->product_code;
         $data['product_quantity'] = $request->product_quantity;
         $data['discount_price'] = $request->discount_price;
@@ -64,18 +70,24 @@ class ProductController extends Controller
         // return response()->json($data);  
 
         if ($image_one && $image_two && $image_three) {
+
+            // $this->uploadProducts($image_one);
+            // $this->uploadProducts($image_two);
+            // $this->uploadProducts($image_three);
+
+        
             $image_one_name = hexdec(uniqid()).'.'.$image_one->getClientOriginalExtension();
-            Image::make($image_one)->resize(300,300)->save('public/media/product/'.$image_one_name);
-            $data['image_one'] = 'public/media/product/'.$image_one_name;
+            Image::make($image_one)->resize(300,300)->save(public_path().'/media/product/'.$image_one_name);
+            $data['image_one'] = 'media/product/'.$image_one_name;
 
             $image_two_name = hexdec(uniqid()).'.'.$image_two->getClientOriginalExtension();
-            Image::make($image_two)->resize(300,300)->save('public/media/product/'.$image_two_name);
-            $data['image_two'] = 'public/media/product/'.$image_two_name;
+            Image::make($image_two)->resize(300,300)->save(public_path().'/media/product/'.$image_two_name);
+            $data['image_two'] = 'media/product/'.$image_two_name;
 
 
             $image_three_name = hexdec(uniqid()).'.'.$image_three->getClientOriginalExtension();
-            Image::make($image_three)->resize(300,300)->save('public/media/product/'.$image_three_name);
-            $data['image_three'] = 'public/media/product/'.$image_three_name;
+            Image::make($image_three)->resize(300,300)->save(public_path().'/media/product/'.$image_three_name);
+            $data['image_three'] = 'media/product/'.$image_three_name;
 
             $product = DB::table('products')->insert($data);
             $notification=array(
@@ -124,7 +136,7 @@ class ProductController extends Controller
 
     }
 
-    public function ViewProduct($id){
+    public function show($id, $slug){
 
         $product = DB::table('products')
                         ->join('categories','products.category_id','categories.id')
@@ -133,21 +145,19 @@ class ProductController extends Controller
                         ->select('products.*','categories.category_name','brands.brand_name','subcategories.subcategory_name')
                         ->where('products.id',$id)
                         ->first();
-
                         return view('admin.product.show',compact('product'));
                         // return response()->json($product);
-            
     }
 
-    public function EditProduct($id){
+    public function edit($id, $slug){
         $product = DB::table('products')->where('id',$id)->first();
         return view('admin.product.edit',compact('product'));
     }
 
-    public function UpdateProductWithoutPhoto(Request $request,$id){
-
+    public function update(Request $request,$id){
         $data = array();
         $data['product_name'] = $request->product_name;
+        $data['product_slug'] = Str::slug($request->product_name);
         $data['product_code'] = $request->product_code;
         $data['product_quantity'] = $request->product_quantity;
         $data['discount_price'] = $request->discount_price;
@@ -173,14 +183,15 @@ class ProductController extends Controller
                 'messege'=>'Produit mis à jour avec succès',
                 'alert-type'=>'success'
                     );
-                return Redirect()->route('all.product')->with($notification);
         }else{
             $notification=array(
                 'messege'=>'Rien à mettre à jour',
                 'alert-type'=>'success'
                     );
-                return Redirect()->route('all.product')->with($notification);
+                
         }
+
+        return Redirect()->route('product.index')->with($notification);
 
     }
 
@@ -252,5 +263,14 @@ class ProductController extends Controller
     }
 
     }
+
+
+
+
+    // protected function uploadProducts($image){
+    //     $image_one_name = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+    //     Image::make($image)->resize(300,300)->save(public_path().'/media/product/'.$image_one_name);
+    //     $data['image_one'] = 'media/product/'.$image_one_name;
+    // }
 
 }
